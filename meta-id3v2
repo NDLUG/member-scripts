@@ -1,0 +1,65 @@
+#!/bin/bash
+# This script aims to make batch audio tagging a little easier
+function usage {
+  echo "Usage:"
+  echo "  $ meta-id3v2 [ options ]"
+  echo "Options:"
+  echo "  -r \"<regex>\" \"<other>\""
+  echo "    Change the id3v2 title tags according to <regex> matching the entire filename,"
+  echo "    which captures a group that is the intended name.  Additionally, run <other> with id3v2."
+  echo "  -t \"<regex>\" \"<other>\""
+  echo "    Show the command(s) that will be run, were this given with -r"
+  echo "    ***Don't trust that things weren't escaped right...escaping works better than it looks in the test..."
+  echo "  -h"
+  echo "    Display this usage message"
+  echo ""
+  echo "Example:"
+  echo "  $ meta-id3v2 -t \"^..(.*)-.*$\" -A \"Cool Album Name\" -a \"Artist Name\""
+  echo "    [confirm this ~= what you want]"
+  echo "  $ meta-id3v2 -r \"^..(.*)-.*$\" -A \"Cool Album Name\" -a \"Artist Name\""
+  exit $1
+}
+opt=$1
+if [ "$opt" == "-h" ]
+then
+  usage 0
+fi
+
+regex=$2
+shift
+shift
+extra=$@
+
+if [ "$opt" == "-t" ]
+then
+  for filename in ./*; do
+    if [ -f "$filename" ]
+    then
+      name=$filename
+      title=`echo $name | sed -E "s/$regex/\1/"`
+      echo id3v2 --song \"$title\" \"$filename\"
+      if [ X"$extra" != X ]
+      then
+        echo id3v2 "$extra" \"$filename\"
+      fi
+    fi
+  done
+  exit 0
+fi
+if [ "$opt" == "-r" ]
+then
+  for filename in ./*; do
+    if [ -f "$filename" ]
+    then
+      name=$filename
+      title=`echo $name | sed -E "s/$regex/\1/"`
+      id3v2 --song "$title" "$filename"
+      if [ X"$extra" != X ]
+      then
+        id3v2 "$@" "$filename"
+      fi
+    fi
+  done
+  exit 0
+fi
+usage 1
