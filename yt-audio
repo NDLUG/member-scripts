@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Requires: youtube-dl, ffmpeg
+# Usage: yt-audio <youtube link>
+# Downloads audio file from youtube and extracts it as an mp3, and formates the
+# file name
+
+download_audio() {
+  youtube-dl --add-metadata --embed-thumbnail --extract-audio --audio-format mp3 $1 -o "%(title)s.%(ext)s"
+}
+
+download_audio $1
