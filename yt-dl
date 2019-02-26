@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Requres: youtube-dl, ffmpeg
+# Usage: yt-dl <youtube video url>
+# Extracts the best audio and encodes it as an mp4 if possible, and parses the
+# title
+
+download() {
+  youtube-dl --add-metadata -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' --embed-thumbnail $1 -o "%(title)s.%(ext)s"
+}
+
+download $1
