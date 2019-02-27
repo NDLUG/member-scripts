@@ -1,0 +1,3 @@
+#!/bin/bash
+
+osascript -e 'tell application "Messages" to get name of buddies ' | gsed s/,/\\\n/g | grep "^[ a-zA-Z ]*$" | gsed -E "s/^ //g"

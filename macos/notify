@@ -1,0 +1,4 @@
+#!/bin/bash
+# Creates a notification in OS X
+# First arg = title, second arg = body
+osascript -e "display notification \"$2\" with title \"$1\""
