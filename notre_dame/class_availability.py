@@ -68,8 +68,8 @@ while True:
         c.api.account.messages.create(to=my_num, from_=t_num, body='{} just closed, {} spots left,  CRN={}'.format(course, number, crn))
 
     if msg != None:
-      msg['From'] = 'vaio@marcopo.li'
-      msg['To'] = 'nmarcopo@nd.edu'
+      msg['From'] = from_email
+      msg['To'] = to_email
       s = smtplib.SMTP('localhost')
       s.send_message(msg)
       s.quit()
