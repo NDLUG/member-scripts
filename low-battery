@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Throw something like this in your crontab.
+# The dbus environment variable may or may not be necessary for you.
+# */5 * * * * DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus ~/bin/low-battery
+
+cap="$(cat /sys/class/power_supply/BAT0/capacity)"
+status="$(cat /sys/class/power_supply/BAT0/status)"
+[ "$cap" -le 20 ] && [ "$status" = 'Discharging' ] && notify-send 'Low battery' "${cap}% capacity remaining" -i battery-low
